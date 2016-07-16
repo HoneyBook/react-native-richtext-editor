@@ -25,7 +25,7 @@ class HBToolbar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            enabledToolbarItems: this.props.toolbarItems ? this.props.toolbarItems : this._populateDefaultToolbarPreset(),
+            enabledToolbarItems: this.props.toolbarItems ? this.props.toolbarItems : this._buildDefaultToolbarPreset(),
             selectedToolbarItems: []
         };
     }
@@ -52,13 +52,16 @@ class HBToolbar extends Component {
         ];
     }
 
-    _populateDefaultToolbarPreset() {
+    _buildDefaultToolbarPreset() {
+        var itemsObjs = [];
+
         var defaultItemsTypesArr = this._getDefaultToolbarPreset();
         for (var i=0; i < defaultItemsTypesArr.length; i++) {
             var toolbarItem = defaultItemsTypesArr[i];
             itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem} itemViewFragment={this._createIconForType(toolbarItem)} isSelected={false} />);
         }
 
+        return itemsObjs;
     }
 
     _createIconForType(type) {

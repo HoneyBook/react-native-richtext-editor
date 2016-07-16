@@ -6,6 +6,7 @@
 
 import React, { Component } from 'react';
 var HBRichTextEditor = require('react-native-richtext-editor');
+var HBToolbar = require('react-native-richtext-editor/HBToolbar');
 
 import {
   AppRegistry,
@@ -15,7 +16,15 @@ import {
 } from 'react-native';
 
 class RNRichTextEditor extends Component {
-  render() {
+    componentDidMount() {
+        var bodyForDisplay = "<p>Wow this is <b>AMAZING!!</b></p>";
+
+        setTimeout(() => {
+            this.refs.myWebView.setHTML(bodyForDisplay);
+        }, 1000);
+    }
+
+    render() {
     var bodyForDisplay = "<p>Wow this is <b>AMAZING!!</b></p>";
     return (
         <View>
