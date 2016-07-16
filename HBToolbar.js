@@ -58,7 +58,7 @@ class HBToolbar extends Component {
         var defaultItemsTypesArr = this._getDefaultToolbarPreset();
         for (var i=0; i < defaultItemsTypesArr.length; i++) {
             var toolbarItem = defaultItemsTypesArr[i];
-            itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem} itemViewFragment={this._createIconForType(toolbarItem)} isSelected={false} />);
+            itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem} itemViewFragment={this._createIconForType(toolbarItem).bind(this)} isSelected={false} />);
         }
 
         return itemsObjs;
@@ -194,7 +194,7 @@ class HBToolbar extends Component {
             if (this.state.selectedToolbarItems.indexOf(toolbarItem) != -1) {
                 isItemSelected = true;
             }
-            itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem} iconImgFragment={this._createIconForType(toolbarItem)} isSelected={isItemSelected} />);
+            itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem} iconImgFragment={this._createIconForType(toolbarItem).bind(this)} isSelected={isItemSelected} />);
         }
         // Include a spacer in the right for adding a "dismiss first responder" button (KB down)
         itemsObjs.push(<View key="rightSpacer" style={{width:50, backgroundColor:"rgba(0,0,0,0)"}} />);
