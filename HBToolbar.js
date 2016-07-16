@@ -10,6 +10,7 @@ var HBToolbarItem = require('./HBToolbarItem');
 var HBEditorConstants = require('./HBEditorConstants');
 var HBEditorEventEmitter = require("./HBEditorEventEmitter");
 var _ = require("lodash");
+var enabledToolbarItems = [];
 
 var {
     ScrollView,
@@ -24,8 +25,10 @@ class HBToolbar extends Component {
 
     constructor(props) {
         super(props);
+        this.enabledToolbarItems =  this.props.toolbarItems && this.props.toolbarItems.length > 0 ? this.props.toolbarItems :
+                                    this._buildDefaultToolbarPreset();
+
         this.state = {
-            enabledToolbarItems: this.props.toolbarItems ? this.props.toolbarItems : this._buildDefaultToolbarPreset(),
             selectedToolbarItems: []
         };
     }
@@ -68,63 +71,35 @@ class HBToolbar extends Component {
         var selectedStyle = {borderRadius: 5, padding:5, color: "#DCDCDC", backgroundColor: "#797979"};
         switch (type) {
             case HBEditorConstants.TOOLBAR_ITEM_BOLD: {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-                    return (<Text style={[styles.selectedIcon, selectedStyle]}>&#xe900;</Text>);
-                } else {
-                    return (<Text style={styles.icon}>&#xe900;</Text>);
-                }
+                return (<Text style={styles.icon}>&#xe900;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ITALIC: {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-                    return (<Text style={[styles.selectedIcon, selectedStyle]}>&#xe903;</Text>);
-                } else {
-                    return (<Text style={styles.icon}>&#xe903;</Text>);
-                }
+                return (<Text style={styles.icon}>&#xe903;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_UNDERLINE: {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-                    return (<Text style={[styles.selectedIcon, selectedStyle]}>&#xe906;</Text>);
-                } else {
-                    return (<Text style={styles.icon}>&#xe906;</Text>);
-                }
+                return (<Text style={styles.icon}>&#xe906;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_CENTER :{
                 return (<Image source={require("./Images/HBcenterjustify.png")} />);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_LEFT:
             {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-                    return (<Text style={[styles.selectedIcon, selectedStyle]}>&#xe905;</Text>);
-                } else {
-                    return (<Text style={styles.icon}>&#xe905;</Text>);
-                }
+                return (<Text style={styles.icon}>&#xe905;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_RIGHT: {
                 return (<Image source={require("./Images/HBrightjustify.png")} />);
             }
             case HBEditorConstants.TOOLBAR_ITEM_INSERT_LINK: {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-                    return (<Text style={[styles.selectedIcon, selectedStyle]}>&#xe904;</Text>);
-                } else {
-                    return (<Text style={styles.icon}>&#xe904;</Text>);
-                }
+                return (<Text style={styles.icon}>&#xe904;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_REMOVE_LINK: {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-                    return (<Text style={[styles.selectedIcon, selectedStyle]}>&#xe904;</Text>);
-                } else {
-                    return (<Text style={styles.icon}>&#xe904;</Text>);
-                }
+                return (<Text style={styles.icon}>&#xe904;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_REMOVE_FORMATTING: {
                 return (<Text style={styles.icon}>&#xe907;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST: {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-                    return (<Text style={[styles.selectedIcon, selectedStyle]}>&#xe901;</Text>);
-                } else {
-                    return (<Text style={styles.icon}>&#xe901;</Text>);
-                }
+                return (<Text style={styles.icon}>&#xe901;</Text>);
             }
         }
 
@@ -135,26 +110,13 @@ class HBToolbar extends Component {
         var selectedStyle = {backgroundColor: "rgb(125,125,125)"};
         switch (type) {
             case HBEditorConstants.TOOLBAR_ITEM_BOLD: {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-
-                    return (<Image source={require("./Images/bold_asset_padded.png")} style={selectedStyle}/>);
-                } else {
-                    return (<Image source={require("./Images/bold_asset_padded.png")} />);
-                }
+                return (<Image source={require("./Images/bold_asset_padded.png")} />);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ITALIC: {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-                    return (<Image source={require("./Images/italic_asset_padded.png")} style={selectedStyle}/>);
-                } else {
-                    return (<Image source={require("./Images/italic_asset_padded.png")}/>);
-                }
+                return (<Image source={require("./Images/italic_asset_padded.png")}/>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_UNDERLINE: {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-                    return (<Image source={require("./Images/underline_asset.png")} style={selectedStyle}/>);
-                } else {
-                    return (<Image source={require("./Images/underline_asset.png")} />);
-                }
+                return (<Image source={require("./Images/underline_asset.png")} />);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_CENTER :{
                 return (<Image source={require("./Images/HBcenterjustify.png")} />);
@@ -175,11 +137,7 @@ class HBToolbar extends Component {
                 return (<Image source={require("./Images/remove_styling.png")} />);
             }
             case HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST: {
-                if (_.includes(this.state.selectedToolbarItems, type)) {
-                    return (<Image source={require("./Images/bullets_asset.png")} style={selectedStyle}/>);
-                } else {
-                    return (<Image source={require("./Images/bullets_asset.png")}/>);
-                }
+                return (<Image source={require("./Images/bullets_asset.png")}/>);
             }
         }
 
@@ -188,8 +146,8 @@ class HBToolbar extends Component {
 
     _renderItems() {
         var itemsObjs = [];
-        for (var i=0; i < this.state.enabledToolbarItems.length; i++) {
-            var toolbarItem = this.state.enabledToolbarItems[i];
+        for (var i=0; i < this.enabledToolbarItems.length; i++) {
+            var toolbarItem = this.enabledToolbarItems[i];
             var isItemSelected = false;
             if (this.state.selectedToolbarItems.indexOf(toolbarItem) != -1) {
                 isItemSelected = true;
@@ -203,7 +161,7 @@ class HBToolbar extends Component {
 
     _renderToolbarItems() {
         var itemsObjs = [];
-        this.state.enabledToolbarItems.forEach((item) => {
+        this.enabledToolbarItems.forEach((item) => {
             item.isSelected = this.state.selectedToolbarItems.indexOf(item.type) != -1;
             itemsObjs.push(item);
         });
