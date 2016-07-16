@@ -1,0 +1,33 @@
+{
+  "name": "react-native-richtext-editor",
+  "version": "0.1.0",
+  "description": "A Flexible Rich Text Editor for React Native",
+  "main": "HBRichTextEditor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "fbemitter": "^2.0.2",
+    "react-native-webview-bridge": "HoneyBook/react-native-webview-bridge"
+  },
+    "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HoneyBook/react-native-richtext-editor.git"
+  },
+  "keywords": [
+    "rich",
+    "text",
+    "editor",
+    "html",
+    "editor",
+    "react",
+    "native",
+    "rn"
+  ],
+  "author": "Guy Eldar",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/HoneyBook/react-native-richtext-editor/issues"
+  },
+  "homepage": "https://github.com/HoneyBook/react-native-richtext-editor#readme"
+}

@@ -1,0 +1,39 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ */
+
+import React, { Component } from 'react';
+var HBRichTextEditor = require('react-native-richtext-editor');
+
+import {
+  AppRegistry,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
+
+class RNRichTextEditor extends Component {
+  render() {
+    var bodyForDisplay = "<p>Wow this is <b>AMAZING!!</b></p>";
+    return (
+        <View>
+            <HBRichTextEditor
+                ref="myWebView"
+                initialHTML={bodyForDisplay}/>
+            <HBToolbar />
+        </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});
+
+AppRegistry.registerComponent('RNRichTextEditor', () => RNRichTextEditor);
