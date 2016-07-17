@@ -80,11 +80,13 @@ class HBToolbar extends Component {
         var itemsObjs = [];
 
         var defaultItemsTypesArr = this._getDefaultToolbarPreset();
+        var selectedStyle = {borderRadius: 5, padding:5, color: "#DCDCDC", backgroundColor: "#797979"};
+
         for (var i=0; i < defaultItemsTypesArr.length; i++) {
             var toolbarItem = defaultItemsTypesArr[i];
             itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem} itemViewFragment={this._createIconForType(toolbarItem)}
-                                          isSelected={false} buttonStyle={this._getDefaultButtonStyle()}
-                                          selectedButtonStyle={this._getDefaultSelectedButtonStyle()} />);
+                                          isSelected={false} buttonStyle={{marginLeft: 5, marginRight: 5}}
+                                          selectedButtonStyle={selectedStyle} />);
         }
 
         return itemsObjs;
