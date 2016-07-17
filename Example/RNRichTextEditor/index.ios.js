@@ -27,7 +27,7 @@ class RNRichTextEditor extends Component {
     render() {
     var bodyForDisplay = "<p>Wow this is <b>AMAZING!!</b></p>";
     return (
-        <View>
+        <View style={styles.container}>
             <HBRichTextEditor
                 ref="myWebView"
                 initialHTML={bodyForDisplay}/>
@@ -39,9 +39,9 @@ class RNRichTextEditor extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
+      flex: 1,
+      backgroundColor: '#fff',
+      flexDirection: "column"
   }
 });
 

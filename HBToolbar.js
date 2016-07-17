@@ -27,6 +27,8 @@ class HBToolbar extends Component {
         super(props);
         this.enabledToolbarItems =  this.props.toolbarItems && this.props.toolbarItems.length > 0 ? this.props.toolbarItems :
                                     this._buildDefaultToolbarPreset();
+        this.buttonStyle = this.props.buttonStyle ? this.props.buttonStyle : this._getDefaultButtonStyle();
+        this.selectedButtonStyle = this.props.selectedButtonStyle ? this.props.selectedButtonStyle : this._getDefaultSelectedButtonStyle();
 
         this.state = {
             selectedToolbarItems: []
@@ -44,6 +46,23 @@ class HBToolbar extends Component {
 
     componentWillUnmount() {
         HBEditorEventEmitter.instance.removeAllListeners(HBEditorConstants.TOOLBAR_ITEMS_STATE_HAS_BEEN_CHANGED);
+    }
+
+    _getDefaultButtonStyle() {
+        return ({
+            fontFamily: 'iconbasic',
+            alignSelf: 'center',
+            padding: 5,
+            fontSize: 28
+        });
+    }
+
+    _getDefaultSelectedButtonStyle() {
+        return ({
+            fontFamily: 'iconbasic',
+            alignSelf:'center',
+            fontSize: 28
+        });
     }
 
     _getDefaultToolbarPreset() {
@@ -71,35 +90,35 @@ class HBToolbar extends Component {
         var selectedStyle = {borderRadius: 5, padding:5, color: "#DCDCDC", backgroundColor: "#797979"};
         switch (type) {
             case HBEditorConstants.TOOLBAR_ITEM_BOLD: {
-                return (<Text style={styles.icon}>&#xe900;</Text>);
+                return (<Text style={this.buttonStyle}>&#xe900;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ITALIC: {
-                return (<Text style={styles.icon}>&#xe903;</Text>);
+                return (<Text style={this.buttonStyle}>&#xe903;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_UNDERLINE: {
-                return (<Text style={styles.icon}>&#xe906;</Text>);
+                return (<Text style={this.buttonStyle}>&#xe906;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_CENTER :{
                 return (<Image source={require("./Images/HBcenterjustify.png")} />);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_LEFT:
             {
-                return (<Text style={styles.icon}>&#xe905;</Text>);
+                return (<Text style={this.buttonStyle}>&#xe905;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_RIGHT: {
                 return (<Image source={require("./Images/HBrightjustify.png")} />);
             }
             case HBEditorConstants.TOOLBAR_ITEM_INSERT_LINK: {
-                return (<Text style={styles.icon}>&#xe904;</Text>);
+                return (<Text style={this.buttonStyle}>&#xe904;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_REMOVE_LINK: {
-                return (<Text style={styles.icon}>&#xe904;</Text>);
+                return (<Text style={this.buttonStyle}>&#xe904;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_REMOVE_FORMATTING: {
-                return (<Text style={styles.icon}>&#xe907;</Text>);
+                return (<Text style={this.buttonStyle}>&#xe907;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST: {
-                return (<Text style={styles.icon}>&#xe901;</Text>);
+                return (<Text style={this.buttonStyle}>&#xe901;</Text>);
             }
         }
 
@@ -149,10 +168,20 @@ class HBToolbar extends Component {
         for (var i=0; i < this.enabledToolbarItems.length; i++) {
             var toolbarItem = this.enabledToolbarItems[i];
             var isItemSelected = false;
-            if (this.state.selectedToolbarItems.indexOf(toolbarItem) != -1) {
+            if (_.includes(this.state.selectedToolbarItems, toolbarItem.key)) {
                 isItemSelected = true;
             }
-            itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem} iconImgFragment={this._createIconForType(toolbarItem)} isSelected={isItemSelected} />);
+            if (isItemSelected) {
+                itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem}
+                                              itemViewFragment={this._createIconForType(toolbarItem)}
+                                              style={this.selectedButtonStyle}
+                                              isSelected={true}/>);
+            } else {
+                itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem}
+                                              itemViewFragment={this._createIconForType(toolbarItem)}
+                                              style={this.buttonStyle}
+                                              isSelected={false}/>);
+            }
         }
         // Include a spacer in the right for adding a "dismiss first responder" button (KB down)
         itemsObjs.push(<View key="rightSpacer" style={{width:50, backgroundColor:"rgba(0,0,0,0)"}} />);
@@ -162,7 +191,7 @@ class HBToolbar extends Component {
     _renderToolbarItems() {
         var itemsObjs = [];
         this.enabledToolbarItems.forEach((item) => {
-            item.isSelected = this.state.selectedToolbarItems.indexOf(item.type) != -1;
+            item.isSelected = this.state.selectedToolbarItems.indexOf(item.key) != -1;
             itemsObjs.push(item);
         });
 
@@ -174,7 +203,7 @@ class HBToolbar extends Component {
     render() {
         return (
             <ScrollView horizontal={true} bounces={false} contentContainerStyle={{}} style={styles.toolbarHolder}>
-                {this._renderToolbarItems()}
+                {this._renderItems()}
             </ScrollView>
         );
     }
