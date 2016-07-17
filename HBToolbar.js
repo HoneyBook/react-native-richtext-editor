@@ -195,7 +195,7 @@ class HBToolbar extends Component {
     _renderToolbarItems() {
         var itemsObjs = [];
         this.enabledToolbarItems.forEach((item) => {
-            item.isSelected = this.state.selectedToolbarItems.indexOf(item.key) != -1;
+            item.isSelected = _.includes(this.state.selectedToolbarItems, item.key);
             itemsObjs.push(item);
         });
 
