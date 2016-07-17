@@ -22,10 +22,19 @@ class HBToolbarItem extends Component {
 
     constructor(props) {
         super(props);
+        this.state = ({
+            isSelected: false
+        });
+    }
+
+    toggleItemSelection(shouldSelect) {
+        this.setState({
+            isSelected: shouldSelect
+        });
     }
 
     render() {
-        if (this.props.isSelected) {
+        if (this.state.isSelected) {
             return (
                 <TouchableOpacity
                     style={this.props.selectedButtonStyle}

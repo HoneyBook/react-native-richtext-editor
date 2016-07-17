@@ -29,18 +29,20 @@ class HBToolbar extends Component {
         this.selectedButtonStyle = this.props.selectedButtonStyle ? this.props.selectedButtonStyle : this._getDefaultSelectedButtonStyle();
         this.enabledToolbarItems =  this.props.toolbarItems && this.props.toolbarItems.length > 0 ? this.props.toolbarItems :
                                     this._buildDefaultToolbarPreset();
-
-        this.state = {
-            selectedToolbarItems: []
-        };
+        this.selectedToolbarItems = [];
+        //this.state = {
+        //    selectedToolbarItems: []
+        //};
     }
 
     componentDidMount() {
         HBEditorEventEmitter.instance.addListener(HBEditorConstants.TOOLBAR_ITEMS_STATE_HAS_BEEN_CHANGED, function(selectedItems) {
             console.log("TOOLBAR ITEMS STATE HAS BEEN CHANGED");
-            this.setState({
-                selectedToolbarItems:selectedItems.selectedItems
-            });
+            this.selectedToolbarItems = selectedItems.selectedItems;
+            this._updateToolbarItemsSelectionState();
+            //this.setState({
+            //    selectedToolbarItems:selectedItems.selectedItems
+            //});
         }.bind(this));
     }
 
@@ -78,11 +80,11 @@ class HBToolbar extends Component {
         var itemsObjs = [];
 
         var defaultItemsTypesArr = this._getDefaultToolbarPreset();
-        var selectedStyle = {borderRadius: 5, padding:5, color: "#DCDCDC", backgroundColor: "#797979"};
+        var selectedStyle = {borderRadius: 5, padding:5, backgroundColor: "#797979"};
 
         for (var i=0; i < defaultItemsTypesArr.length; i++) {
             var toolbarItem = defaultItemsTypesArr[i];
-            itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem} itemViewFragment={this._createIconForType(toolbarItem)}
+            itemsObjs.push(<HBToolbarItem ref={toolbarItem} key={toolbarItem} type={toolbarItem} itemViewFragment={this._createIconForType(toolbarItem)}
                                           isSelected={false} buttonStyle={{marginLeft: 5, marginRight: 5}}
                                           selectedButtonStyle={selectedStyle} />);
         }
@@ -192,11 +194,22 @@ class HBToolbar extends Component {
         return <View style={styles.buttons}>{itemsObjs}</View>;
     }
 
+
+    _updateToolbarItemsSelectionState() {
+        var that = this;
+        this.enabledToolbarItems.forEach((item) => {
+            if (this.selectedToolbarItems && this.selectedToolbarItems.length > 0) {
+
+                var isItemSelected = _.includes(that.selectedToolbarItems, item.key);
+                that.refs[item.key].toggleItemSelection(isItemSelected);
+            }
+        });
+    }
+
     _renderToolbarItems() {
         var itemsObjs = [];
+        var that = this;
         this.enabledToolbarItems.forEach((item) => {
-            var isItemSelected = _.includes(this.state.selectedToolbarItems, item.key);
-            item.setNativeProps({isSelected: isItemSelected});
             itemsObjs.push(item);
         });
 
@@ -207,7 +220,7 @@ class HBToolbar extends Component {
 
     render() {
         return (
-            <ScrollView horizontal={true} bounces={false} contentContainerStyle={{}} style={styles.toolbarHolder}>
+            <ScrollView ref="scrollView" horizontal={true} bounces={false} contentContainerStyle={{}} style={styles.toolbarHolder}>
                 {this._renderToolbarItems()}
             </ScrollView>
         );
