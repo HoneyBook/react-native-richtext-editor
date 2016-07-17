@@ -25,10 +25,10 @@ class HBToolbar extends Component {
 
     constructor(props) {
         super(props);
-        this.enabledToolbarItems =  this.props.toolbarItems && this.props.toolbarItems.length > 0 ? this.props.toolbarItems :
-                                    this._buildDefaultToolbarPreset();
         this.buttonStyle = this.props.buttonStyle ? this.props.buttonStyle : this._getDefaultButtonStyle();
         this.selectedButtonStyle = this.props.selectedButtonStyle ? this.props.selectedButtonStyle : this._getDefaultSelectedButtonStyle();
+        this.enabledToolbarItems =  this.props.toolbarItems && this.props.toolbarItems.length > 0 ? this.props.toolbarItems :
+                                    this._buildDefaultToolbarPreset();
 
         this.state = {
             selectedToolbarItems: []
