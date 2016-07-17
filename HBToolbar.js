@@ -53,7 +53,9 @@ class HBToolbar extends Component {
             fontFamily: 'iconbasic',
             alignSelf: 'center',
             padding: 5,
-            fontSize: 28
+            fontSize: 28,
+            marginLeft: 5,
+            marginRight: 5
         });
     }
 
@@ -80,7 +82,9 @@ class HBToolbar extends Component {
         var defaultItemsTypesArr = this._getDefaultToolbarPreset();
         for (var i=0; i < defaultItemsTypesArr.length; i++) {
             var toolbarItem = defaultItemsTypesArr[i];
-            itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem} itemViewFragment={this._createIconForType(toolbarItem)} isSelected={false} />);
+            itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem} itemViewFragment={this._createIconForType(toolbarItem)}
+                                          isSelected={false} buttonStyle={this._getDefaultButtonStyle()}
+                                          selectedButtonStyle={this._getDefaultSelectedButtonStyle()} />);
         }
 
         return itemsObjs;
@@ -203,7 +207,7 @@ class HBToolbar extends Component {
     render() {
         return (
             <ScrollView horizontal={true} bounces={false} contentContainerStyle={{}} style={styles.toolbarHolder}>
-                {this._renderItems()}
+                {this._renderToolbarItems()}
             </ScrollView>
         );
     }

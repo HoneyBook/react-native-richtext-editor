@@ -12,8 +12,12 @@ var {
     Text,
     } = ReactNative;
 
+// this.props.key
 // this.props.type (HBEditorConstants.TOOLBAR_ITEM_TYPES)
 // this.props.itemViewFragment
+// this.props.buttonStyle
+// this props.selectedButtonStyle
+// this.props.isSelected
 class HBToolbarItem extends Component {
 
     constructor(props) {
@@ -21,16 +25,30 @@ class HBToolbarItem extends Component {
     }
 
     render() {
-        return (
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => {
+        if (this.props.isSelected) {
+            return (
+                <TouchableOpacity
+                    style={this.props.selectedButtonStyle}
+                    onPress={() => {
                     console.log("Pressed " + this.props.type);
                     HBEditorEventEmitter.instance.emit(HBEditorConstants.TOOLBAR_ITEM_WAS_PRESSED,{type:this.props.type});
                 }}>
-                {this.props.itemViewFragment}
-            </TouchableOpacity>
-        );
+                    {this.props.itemViewFragment}
+                </TouchableOpacity>
+            );
+        } else {
+            return (
+                <TouchableOpacity
+                    style={this.props.buttonStyle}
+                    onPress={() => {
+                    console.log("Pressed " + this.props.type);
+                    HBEditorEventEmitter.instance.emit(HBEditorConstants.TOOLBAR_ITEM_WAS_PRESSED,{type:this.props.type});
+                }}>
+                    {this.props.itemViewFragment}
+                </TouchableOpacity>
+            );
+
+        }
     }
 
 }
