@@ -49,22 +49,20 @@ class HBToolbar extends Component {
     }
 
     _getDefaultButtonStyle() {
-        return ({
+        return {
             fontFamily: 'iconbasic',
             alignSelf: 'center',
             padding: 5,
-            fontSize: 28,
-            marginLeft: 5,
-            marginRight: 5
-        });
+            fontSize: 28
+        };
     }
 
     _getDefaultSelectedButtonStyle() {
-        return ({
+        return {
             fontFamily: 'iconbasic',
             alignSelf:'center',
             fontSize: 28
-        });
+        };
     }
 
     _getDefaultToolbarPreset() {
