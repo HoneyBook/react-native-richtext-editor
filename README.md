@@ -1,7 +1,7 @@
 # react-native-richtext-editor
-A Flexible Rich Text Editor for React Native
+A Flexible Rich Text Editor for React Native.
 
-**This library currently supports only iOS**
+**This library currently supports iOS only**
 
 ### Demo
 ![](./demo.gif)
@@ -34,6 +34,9 @@ var HBToolbar = require('react-native-richtext-editor/HBToolbar');
 
 ### TODOs
 - Android Support
+- Add color/BG color buttons (and logic).
+- Improve link creation on editor.
+- Take out the 1000ms timeout when initing the editor.
 
 License
 ----
