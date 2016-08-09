@@ -3,13 +3,9 @@
  */
 import React, { Component } from 'react';
 var ReactNative = require('react-native');
-var HBEditorEventEmitter = require('./HBEditorEventEmitter');
-var HBEditorConstants = require('./HBEditorConstants');
 
 var {
     TouchableOpacity,
-    StyleSheet,
-    Text,
     } = ReactNative;
 
 // this.props.key
@@ -22,51 +18,18 @@ class HBToolbarItem extends Component {
 
     constructor(props) {
         super(props);
-        this.state = ({
-            isSelected: false
-        });
-    }
-
-    toggleItemSelection(shouldSelect) {
-        this.setState({
-            isSelected: shouldSelect
-        });
     }
 
     render() {
-        if (this.state.isSelected) {
-            return (
-                <TouchableOpacity
-                    style={this.props.selectedButtonStyle}
-                    onPress={() => {
-                    console.log("Pressed " + this.props.type);
-                    HBEditorEventEmitter.instance.emit(HBEditorConstants.TOOLBAR_ITEM_WAS_PRESSED,{type:this.props.type});
-                }}>
-                    {this.props.itemViewFragment}
-                </TouchableOpacity>
-            );
-        } else {
-            return (
-                <TouchableOpacity
-                    style={this.props.buttonStyle}
-                    onPress={() => {
-                    console.log("Pressed " + this.props.type);
-                    HBEditorEventEmitter.instance.emit(HBEditorConstants.TOOLBAR_ITEM_WAS_PRESSED,{type:this.props.type});
-                }}>
-                    {this.props.itemViewFragment}
-                </TouchableOpacity>
-            );
-
-        }
+        return (
+            <TouchableOpacity
+                {...this.props}
+                style={this.props.isSelected?this.props.selectedButtonStyle:this.props.buttonStyle}>
+                {this.props.itemViewFragment}
+            </TouchableOpacity>
+        );
     }
 
 }
-
-var styles = StyleSheet.create({
-    button: {
-        marginLeft: 5,
-        marginRight: 5
-    }
-});
 
 module.exports = HBToolbarItem;

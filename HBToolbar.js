@@ -10,13 +10,13 @@ var HBToolbarItem = require('./HBToolbarItem');
 var HBEditorConstants = require('./HBEditorConstants');
 var HBEditorEventEmitter = require("./HBEditorEventEmitter");
 var _ = require("lodash");
-var enabledToolbarItems = [];
 
 var {
-    ScrollView,
+    ListView,
     StyleSheet,
     Image,
     View,
+    TouchableOpacity,
     Text
     } = ReactNative;
 
@@ -27,22 +27,19 @@ class HBToolbar extends Component {
         super(props);
         this.buttonStyle = this.props.buttonStyle ? this.props.buttonStyle : this._getDefaultButtonStyle();
         this.selectedButtonStyle = this.props.selectedButtonStyle ? this.props.selectedButtonStyle : this._getDefaultSelectedButtonStyle();
-        this.enabledToolbarItems =  this.props.toolbarItems && this.props.toolbarItems.length > 0 ? this.props.toolbarItems :
-                                    this._buildDefaultToolbarPreset();
-        this.selectedToolbarItems = [];
-        //this.state = {
-        //    selectedToolbarItems: []
-        //};
+        this.types = this.props.toolbarItems && this.props.toolbarItems.length > 0 ? this.props.toolbarItems :
+            this._getDefaultToolbarPreset({});
+        var ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
+        this._pressData = {};
+        this.state = {
+            dataSource: ds.cloneWithRows(this._genCols(this._pressData))
+        };
     }
 
     componentDidMount() {
-        HBEditorEventEmitter.instance.addListener(HBEditorConstants.TOOLBAR_ITEMS_STATE_HAS_BEEN_CHANGED, function(selectedItems) {
+        HBEditorEventEmitter.instance.addListener(HBEditorConstants.TOOLBAR_ITEMS_STATE_HAS_BEEN_CHANGED, function (selectedItems) {
             console.log("TOOLBAR ITEMS STATE HAS BEEN CHANGED");
-            this.selectedToolbarItems = selectedItems.selectedItems;
-            this._updateToolbarItemsSelectionState();
-            //this.setState({
-            //    selectedToolbarItems:selectedItems.selectedItems
-            //});
+            this._updateToolbarItemsSelectionState(selectedItems);
         }.bind(this));
     }
 
@@ -62,68 +59,92 @@ class HBToolbar extends Component {
     _getDefaultSelectedButtonStyle() {
         return {
             fontFamily: 'iconbasic',
-            alignSelf:'center',
+            alignSelf: 'center',
             fontSize: 28
         };
     }
 
     _getDefaultToolbarPreset() {
         return [
-            HBEditorConstants.TOOLBAR_ITEM_BOLD, HBEditorConstants.TOOLBAR_ITEM_ITALIC,
+            HBEditorConstants.TOOLBAR_ITEM_BOLD,
+            HBEditorConstants.TOOLBAR_ITEM_ITALIC,
             HBEditorConstants.TOOLBAR_ITEM_UNDERLINE,
-            HBEditorConstants.TOOLBAR_ITEM_REMOVE_FORMATTING, HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST,
+            HBEditorConstants.TOOLBAR_ITEM_REMOVE_FORMATTING,
+            HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST,
             HBEditorConstants.TOOLBAR_ITEM_INSERT_LINK
         ];
     }
 
-    _buildDefaultToolbarPreset() {
-        var itemsObjs = [];
+    _genCols(pressedData) {
+        var arr = [];
+        this.types.forEach(function (type) {
+            var selected = false;
+            if (pressedData[type]) {
+                selected = true;
+            }
+            arr.push({type: type, selected: selected});
+        });
+        return arr;
+    }
 
-        var defaultItemsTypesArr = this._getDefaultToolbarPreset();
-        var selectedStyle = {borderRadius: 5, padding:5, backgroundColor: "#797979"};
+    _updateToolbarItemsSelectionState(selectedItems) {
+        var newPressedData = {};
+        selectedItems.forEach((item) => {
+            newPressedData[item] = true;
+        });
+        this._pressData = newPressedData;
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(
+                this._genCols(this._pressData)
+            )
+        });
+    }
 
-        for (var i=0; i < defaultItemsTypesArr.length; i++) {
-            var toolbarItem = defaultItemsTypesArr[i];
-            itemsObjs.push(<HBToolbarItem ref={toolbarItem} key={toolbarItem} type={toolbarItem} itemViewFragment={this._createIconForType(toolbarItem)}
-                                          isSelected={false} buttonStyle={{marginLeft: 5, marginRight: 5}}
-                                          selectedButtonStyle={selectedStyle} />);
-        }
-
-        return itemsObjs;
+    _pressCol(data) {
+        HBEditorEventEmitter.instance.emit(HBEditorConstants.TOOLBAR_ITEM_WAS_PRESSED, {type: data.type});
     }
 
     _createIconForType(type) {
-        var selectedStyle = {borderRadius: 5, padding:5, color: "#DCDCDC", backgroundColor: "#797979"};
+        var selectedStyle = {borderRadius: 5, padding: 5, color: "#DCDCDC", backgroundColor: "#797979"};
         switch (type) {
-            case HBEditorConstants.TOOLBAR_ITEM_BOLD: {
+            case HBEditorConstants.TOOLBAR_ITEM_BOLD:
+            {
                 return (<Text style={this.buttonStyle}>&#xe900;</Text>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_ITALIC: {
+            case HBEditorConstants.TOOLBAR_ITEM_ITALIC:
+            {
                 return (<Text style={this.buttonStyle}>&#xe903;</Text>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_UNDERLINE: {
+            case HBEditorConstants.TOOLBAR_ITEM_UNDERLINE:
+            {
                 return (<Text style={this.buttonStyle}>&#xe906;</Text>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_ALIGN_CENTER :{
-                return (<Image source={require("./Images/HBcenterjustify.png")} />);
+            case HBEditorConstants.TOOLBAR_ITEM_ALIGN_CENTER :
+            {
+                return (<Image source={require("./Images/HBcenterjustify.png")}/>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_LEFT:
             {
                 return (<Text style={this.buttonStyle}>&#xe905;</Text>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_ALIGN_RIGHT: {
-                return (<Image source={require("./Images/HBrightjustify.png")} />);
+            case HBEditorConstants.TOOLBAR_ITEM_ALIGN_RIGHT:
+            {
+                return (<Image source={require("./Images/HBrightjustify.png")}/>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_INSERT_LINK: {
+            case HBEditorConstants.TOOLBAR_ITEM_INSERT_LINK:
+            {
                 return (<Text style={this.buttonStyle}>&#xe904;</Text>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_REMOVE_LINK: {
+            case HBEditorConstants.TOOLBAR_ITEM_REMOVE_LINK:
+            {
                 return (<Text style={this.buttonStyle}>&#xe904;</Text>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_REMOVE_FORMATTING: {
+            case HBEditorConstants.TOOLBAR_ITEM_REMOVE_FORMATTING:
+            {
                 return (<Text style={this.buttonStyle}>&#xe907;</Text>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST: {
+            case HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST:
+            {
                 return (<Text style={this.buttonStyle}>&#xe901;</Text>);
             }
         }
@@ -134,34 +155,44 @@ class HBToolbar extends Component {
     _createImageForType(type) {
         var selectedStyle = {backgroundColor: "rgb(125,125,125)"};
         switch (type) {
-            case HBEditorConstants.TOOLBAR_ITEM_BOLD: {
-                return (<Image source={require("./Images/bold_asset_padded.png")} />);
+            case HBEditorConstants.TOOLBAR_ITEM_BOLD:
+            {
+                return (<Image source={require("./Images/bold_asset_padded.png")}/>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_ITALIC: {
+            case HBEditorConstants.TOOLBAR_ITEM_ITALIC:
+            {
                 return (<Image source={require("./Images/italic_asset_padded.png")}/>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_UNDERLINE: {
-                return (<Image source={require("./Images/underline_asset.png")} />);
+            case HBEditorConstants.TOOLBAR_ITEM_UNDERLINE:
+            {
+                return (<Image source={require("./Images/underline_asset.png")}/>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_ALIGN_CENTER :{
-                return (<Image source={require("./Images/HBcenterjustify.png")} />);
+            case HBEditorConstants.TOOLBAR_ITEM_ALIGN_CENTER :
+            {
+                return (<Image source={require("./Images/HBcenterjustify.png")}/>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_ALIGN_LEFT: {
-                return (<Image source={require("./Images/HBleftjustify.png")} />);
+            case HBEditorConstants.TOOLBAR_ITEM_ALIGN_LEFT:
+            {
+                return (<Image source={require("./Images/HBleftjustify.png")}/>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_ALIGN_RIGHT: {
-                return (<Image source={require("./Images/HBrightjustify.png")} />);
+            case HBEditorConstants.TOOLBAR_ITEM_ALIGN_RIGHT:
+            {
+                return (<Image source={require("./Images/HBrightjustify.png")}/>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_INSERT_LINK: {
-                return (<Image source={require("./Images/link_asset.png")} />);
+            case HBEditorConstants.TOOLBAR_ITEM_INSERT_LINK:
+            {
+                return (<Image source={require("./Images/link_asset.png")}/>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_REMOVE_LINK: {
-                return (<Image source={require("./Images/HBunlink.png")} />);
+            case HBEditorConstants.TOOLBAR_ITEM_REMOVE_LINK:
+            {
+                return (<Image source={require("./Images/HBunlink.png")}/>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_REMOVE_FORMATTING: {
-                return (<Image source={require("./Images/remove_styling.png")} />);
+            case HBEditorConstants.TOOLBAR_ITEM_REMOVE_FORMATTING:
+            {
+                return (<Image source={require("./Images/remove_styling.png")}/>);
             }
-            case HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST: {
+            case HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST:
+            {
                 return (<Image source={require("./Images/bullets_asset.png")}/>);
             }
         }
@@ -169,60 +200,30 @@ class HBToolbar extends Component {
         return undefined;
     }
 
-    _renderItems() {
-        var itemsObjs = [];
-        for (var i=0; i < this.enabledToolbarItems.length; i++) {
-            var toolbarItem = this.enabledToolbarItems[i];
-            var isItemSelected = false;
-            if (_.includes(this.state.selectedToolbarItems, toolbarItem.key)) {
-                isItemSelected = true;
-            }
-            if (isItemSelected) {
-                itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem}
-                                              itemViewFragment={this._createIconForType(toolbarItem)}
-                                              style={this.selectedButtonStyle}
-                                              isSelected={true}/>);
-            } else {
-                itemsObjs.push(<HBToolbarItem key={toolbarItem} type={toolbarItem}
-                                              itemViewFragment={this._createIconForType(toolbarItem)}
-                                              style={this.buttonStyle}
-                                              isSelected={false}/>);
-            }
-        }
-        // Include a spacer in the right for adding a "dismiss first responder" button (KB down)
-        itemsObjs.push(<View key="rightSpacer" style={{width:50, backgroundColor:"rgba(0,0,0,0)"}} />);
-        return <View style={styles.buttons}>{itemsObjs}</View>;
-    }
+    _renderCol(colData) {
+        return <HBToolbarItem
+            selectedButtonStyle={{borderRadius: 5, padding:5, backgroundColor: "#797979"}}
+            buttonStyle={{marginLeft: 5, marginRight: 5}}
+            isSelected={colData.selected}
+            itemViewFragment={this._createIconForType(colData.type)}
+            onPress={function(){
+                this._pressCol(colData);
+            }.bind(this)}>
 
-
-    _updateToolbarItemsSelectionState() {
-        var that = this;
-        this.enabledToolbarItems.forEach((item) => {
-            if (this.selectedToolbarItems && this.selectedToolbarItems.length > 0) {
-
-                var isItemSelected = _.includes(that.selectedToolbarItems, item.key);
-                that.refs[item.key].toggleItemSelection(isItemSelected);
-            }
-        });
-    }
-
-    _renderToolbarItems() {
-        var itemsObjs = [];
-        var that = this;
-        this.enabledToolbarItems.forEach((item) => {
-            itemsObjs.push(item);
-        });
-
-        // Include a spacer in the right for adding a "dismiss first responder" button (KB down)
-        itemsObjs.push(<View key="rightSpacer" style={{width:50, backgroundColor:"rgba(0,0,0,0)"}} />);
-        return <View style={styles.buttons}>{itemsObjs}</View>;
+        </HBToolbarItem>;
     }
 
     render() {
         return (
-            <ScrollView ref="scrollView" horizontal={true} bounces={false} contentContainerStyle={{}} style={styles.toolbarHolder}>
-                {this._renderToolbarItems()}
-            </ScrollView>
+            <ListView
+                horizontal={true}
+                bounces={false}
+                contentContainerStyle={{}}
+                style={styles.toolbarHolder}
+                dataSource={this.state.dataSource}
+                renderRow={this._renderCol.bind(this)}
+            />
+
         );
     }
 
@@ -230,25 +231,25 @@ class HBToolbar extends Component {
 
 var styles = StyleSheet.create({
     toolbarHolder: {
-        flex:1,
+        flex: 1,
         flexDirection: "row",
         backgroundColor: 'rgba(125,125,125,0.1)',
-        paddingTop:4
+        paddingTop: 4
     },
     buttons: {
-        flex:1,
-        flexDirection:"row",
+        flex: 1,
+        flexDirection: "row",
         paddingBottom: 4
     },
     selectedIcon: {
         fontFamily: 'iconbasic',
-        alignSelf:'center',
+        alignSelf: 'center',
         fontSize: 28
     },
     icon: {
         fontFamily: 'iconbasic',
-        alignSelf:'center',
-        padding:5,
+        alignSelf: 'center',
+        padding: 5,
         fontSize: 28
     }
 });

@@ -82,10 +82,10 @@ class HBRichTextEditor extends Component {
         console.log("inside onShouldStartLoadRequest with url " + event.url);
         if (event.url.indexOf("callback://") != -1) {
             var urlParams = event.url.replace("callback://0/","");
-            var itemNames = urlParams.split(",");
+            var items = urlParams.split(",");
 
             HBEditorEventEmitter.instance.emit(HBEditorConstants.HB_RICH_EDITOR_GOT_FOCUS);
-            HBEditorEventEmitter.instance.emit(HBEditorConstants.TOOLBAR_ITEMS_STATE_HAS_BEEN_CHANGED,{selectedItems:itemNames});
+            HBEditorEventEmitter.instance.emit(HBEditorConstants.TOOLBAR_ITEMS_STATE_HAS_BEEN_CHANGED, items);
 
             return false;
         }
