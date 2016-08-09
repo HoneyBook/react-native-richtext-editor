@@ -201,28 +201,31 @@ class HBToolbar extends Component {
     }
 
     _renderCol(colData) {
-        return <HBToolbarItem
-            selectedButtonStyle={{borderRadius: 5, padding:5, backgroundColor: "#797979"}}
-            buttonStyle={{marginLeft: 5, marginRight: 5}}
-            isSelected={colData.selected}
-            itemViewFragment={this._createIconForType(colData.type)}
+        return <TouchableOpacity
+
+            style={[{marginLeft: 5, padding:2},
+                    colData.selected?{borderRadius: 2, backgroundColor: "#797979"}:undefined]}
             onPress={function(){
                 this._pressCol(colData);
             }.bind(this)}>
-
-        </HBToolbarItem>;
+            {this._createIconForType(colData.type)}
+        </TouchableOpacity>
     }
 
     render() {
         return (
-            <ListView
-                horizontal={true}
-                bounces={false}
-                contentContainerStyle={{}}
-                style={styles.toolbarHolder}
-                dataSource={this.state.dataSource}
-                renderRow={this._renderCol.bind(this)}
-            />
+            <View style={styles.toolbarHolder}>
+                {this.props.fixedLeft}
+                <ListView
+                    horizontal={true}
+                    bounces={false}
+                    contentContainerStyle={{}}
+                    dataSource={this.state.dataSource}
+                    renderRow={this._renderCol.bind(this)}
+                />
+                {this.props.fixedRight}
+
+            </View>
 
         );
     }
@@ -234,7 +237,6 @@ var styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         backgroundColor: 'rgba(125,125,125,0.1)',
-        paddingTop: 4
     },
     buttons: {
         flex: 1,
