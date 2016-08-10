@@ -65,12 +65,8 @@ class HBRichTextEditor extends Component {
     render() {
         return (
             <WebViewBridge
+                {...this.props}
                 ref="webviewbridge"
-                style={{
-                    alignItems:'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'rgba(0,0,0,0)'
-                  }}
                 onBridgeMessage={this.onBridgeMessage.bind(this)}
                 onShouldStartLoadWithRequest={this.onShouldStartLoadRequest.bind(this)}
                 hideKeyboardAccessoryView={true}
