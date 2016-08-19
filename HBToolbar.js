@@ -25,8 +25,15 @@ class HBToolbar extends Component {
 
     constructor(props) {
         super(props);
-        this.buttonStyle = this.props.buttonStyle ? this.props.buttonStyle : this._getDefaultButtonStyle();
-        this.selectedButtonStyle = this.props.selectedButtonStyle ? this.props.selectedButtonStyle : this._getDefaultSelectedButtonStyle();
+        this.buttonStyle =[this.props.baseButtonStyle?
+            this.props.baseButtonStyle:
+            this._getDefaultButtonStyle(),this.props.defaultButtonStyle]
+
+        this.selectedButtonStyle =[this.props.baseButtonStyle?
+            this.props.baseButtonStyle:
+            this._getDefaultSelectedButtonStyle(),this.props.selectedButtonStyle]
+
+
         this.types = this.props.toolbarItems && this.props.toolbarItems.length > 0 ? this.props.toolbarItems :
             this._getDefaultToolbarPreset({});
         var ds = new ListView.DataSource({rowHasChanged: (row1, row2) => row1 !== row2});
@@ -104,20 +111,20 @@ class HBToolbar extends Component {
         HBEditorEventEmitter.instance.emit(HBEditorConstants.TOOLBAR_ITEM_WAS_PRESSED, {type: data.type});
     }
 
-    _createIconForType(type) {
-        var selectedStyle = {borderRadius: 5, padding: 5, color: "#DCDCDC", backgroundColor: "#797979"};
+    _createIconForType(type,isSelected) {
+        var style = [this.buttonStyle,isSelected?this.selectedButtonStyle:undefined];
         switch (type) {
             case HBEditorConstants.TOOLBAR_ITEM_BOLD:
             {
-                return (<Text style={this.buttonStyle}>&#xe900;</Text>);
+                return (<Text style={style}>&#xe900;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ITALIC:
             {
-                return (<Text style={this.buttonStyle}>&#xe903;</Text>);
+                return (<Text style={style}>&#xe903;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_UNDERLINE:
             {
-                return (<Text style={this.buttonStyle}>&#xe906;</Text>);
+                return (<Text style={style}>&#xe906;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_CENTER :
             {
@@ -125,7 +132,7 @@ class HBToolbar extends Component {
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_LEFT:
             {
-                return (<Text style={this.buttonStyle}>&#xe905;</Text>);
+                return (<Text style={style}>&#xe905;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_RIGHT:
             {
@@ -133,19 +140,19 @@ class HBToolbar extends Component {
             }
             case HBEditorConstants.TOOLBAR_ITEM_INSERT_LINK:
             {
-                return (<Text style={this.buttonStyle}>&#xe904;</Text>);
+                return (<Text style={style}>&#xe904;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_REMOVE_LINK:
             {
-                return (<Text style={this.buttonStyle}>&#xe904;</Text>);
+                return (<Text style={style}>&#xe904;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_REMOVE_FORMATTING:
             {
-                return (<Text style={this.buttonStyle}>&#xe907;</Text>);
+                return (<Text style={style}>&#xe907;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST:
             {
-                return (<Text style={this.buttonStyle}>&#xe901;</Text>);
+                return (<Text style={style}>&#xe901;</Text>);
             }
         }
 
@@ -203,12 +210,15 @@ class HBToolbar extends Component {
     _renderCol(colData) {
         return <TouchableOpacity
 
-            style={[{marginLeft: 5, padding:2},
-                    colData.selected?{borderRadius: 2, backgroundColor: "#797979"}:undefined]}
+            style={[{marginLeft: 2, marginTop:1.5, padding:2},
+                    colData.selected?
+                        this.props.selectedItemBackgroundStyle:
+                        this.props.defaultItemBackgroundStyle
+                    ]}
             onPress={function(){
                 this._pressCol(colData);
             }.bind(this)}>
-            {this._createIconForType(colData.type)}
+            {this._createIconForType(colData.type,colData.selected)}
         </TouchableOpacity>
     }
 
