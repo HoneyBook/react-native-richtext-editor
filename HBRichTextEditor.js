@@ -51,12 +51,13 @@ class HBRichTextEditor extends Component {
 
         AlertIOS.prompt(
             'Insert link',
-            'Type the URL for the link',
+            'Enter the URL for the link',
             [
-                {text: 'OK', onPress: (url) => {
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
+                {text: 'Insert', onPress: (url) => {
                     this.refs.webviewbridge.sendToBridge(`zss_editor.insertLink(\"` + url + `\", \"\");`);
                 }, type: "default"},
-                {text: 'Cancel', onPress: () => console.log('Cancel Pressed')}
+
             ],
             'plain-text'
         );
