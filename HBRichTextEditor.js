@@ -59,7 +59,8 @@ class HBRichTextEditor extends Component {
                 }, type: "default"},
 
             ],
-            'plain-text'
+            'plain-text',
+            'http://'
         );
     }
 
