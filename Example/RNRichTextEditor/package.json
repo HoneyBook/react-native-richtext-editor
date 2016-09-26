@@ -6,8 +6,12 @@
     "start": "node node_modules/react-native/local-cli/cli.js start"
   },
   "dependencies": {
-    "react": "15.1.0",
-    "react-native": "^0.27.2",
-    "react-native-richtext-editor": "HoneyBook/react-native-richtext-editor"
+    "fbemitter": "^2.0.2",
+    "lodash": "3.10.1",
+    "react": "15.2.0",
+    "react-native": "^0.29.2",
+    "react-native-keyboard-spacer": "^0.3.0",
+    "react-native-richtext-editor": "HoneyBook/react-native-richtext-editor",
+    "react-native-webview-bridge": "HoneyBook/react-native-webview-bridge"
   }
 }

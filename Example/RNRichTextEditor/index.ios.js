@@ -1,12 +1,14 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
+ * react-native-richtext-editor Example
+ * https://github.com/HoneyBook/react-native-richtext-editor
+ * HoneyBook Inc.
  * @flow
  */
 
 import React, { Component } from 'react';
 var HBRichTextEditor = require('react-native-richtext-editor');
 var HBToolbar = require('react-native-richtext-editor/HBToolbar');
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import {
   AppRegistry,
@@ -16,31 +18,20 @@ import {
 } from 'react-native';
 
 class RNRichTextEditor extends Component {
-    componentDidMount() {
-        var bodyForDisplay = "<p>Wow this is <b>AMAZING!!</b></p>";
-
-        setTimeout(() => {
-            this.refs.myWebView.setHTML(bodyForDisplay);
-        }, 1000);
-    }
 
     render() {
-    var bodyForDisplay = "<p>Wow this is <b>AMAZING!!</b></p>";
+    var bodyForDisplay = "<p>Wow this is an <b>AMAZING</b> demo!</p>";
     return (
         <View style={styles.container}>
             <HBRichTextEditor
-                ref="myWebView"
                 style={{
                     alignItems:'center',
                     justifyContent: 'center',
                     backgroundColor: 'rgba(0,0,0,0)'
                   }}
                 initialHTML={bodyForDisplay}/>
-            <HBToolbar
-                fixedRight={<View
-                    style={{width:56,backgroundColor:'#000'}}
-                />}
-            />
+            <HBToolbar/>
+            <KeyboardSpacer/>
         </View>
     );
   }
