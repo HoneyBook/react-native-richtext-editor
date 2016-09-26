@@ -12,7 +12,10 @@ A Flexible Rich Text Editor for React Native.
 
 ```npm install react-native-richtext-editor --save```
 
-- Then, in order to add both the editor and its toolbar separately, add these requires to your code:
+### Usage
+It is strongly recommended to go through the Example project attached to this repo.
+
+In order to add both the editor and its toolbar separately, add these requires to your code:
 ```
 var HBRichTextEditor = require('react-native-richtext-editor');
 var HBToolbar = require('react-native-richtext-editor/HBToolbar');
@@ -21,7 +24,7 @@ var HBToolbar = require('react-native-richtext-editor/HBToolbar');
 - In your render method, add the components like this:
 ```
 <HBRichTextEditor
-                ref="myWebView"
+                ref="myEditor"
                 initialHTML={bodyForDisplay}/>
 <HBToolbar />
 ```
