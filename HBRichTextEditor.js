@@ -51,26 +51,24 @@ class HBRichTextEditor extends Component {
 
         AlertIOS.prompt(
             'Insert link',
-            'Type the URL for the link',
+            'Enter the URL for the link',
             [
-                {text: 'OK', onPress: (url) => {
+                {text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
+                {text: 'Insert', onPress: (url) => {
                     this.refs.webviewbridge.sendToBridge(`zss_editor.insertLink(\"` + url + `\", \"\");`);
                 }, type: "default"},
-                {text: 'Cancel', onPress: () => console.log('Cancel Pressed')}
+
             ],
-            'plain-text'
+            'plain-text',
+            'http://'
         );
     }
 
     render() {
         return (
             <WebViewBridge
+                {...this.props}
                 ref="webviewbridge"
-                style={{
-                    alignItems:'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'rgba(0,0,0,0)'
-                  }}
                 onBridgeMessage={this.onBridgeMessage.bind(this)}
                 onShouldStartLoadWithRequest={this.onShouldStartLoadRequest.bind(this)}
                 hideKeyboardAccessoryView={true}
@@ -82,10 +80,10 @@ class HBRichTextEditor extends Component {
         console.log("inside onShouldStartLoadRequest with url " + event.url);
         if (event.url.indexOf("callback://") != -1) {
             var urlParams = event.url.replace("callback://0/","");
-            var itemNames = urlParams.split(",");
+            var items = urlParams.split(",");
 
             HBEditorEventEmitter.instance.emit(HBEditorConstants.HB_RICH_EDITOR_GOT_FOCUS);
-            HBEditorEventEmitter.instance.emit(HBEditorConstants.TOOLBAR_ITEMS_STATE_HAS_BEEN_CHANGED,{selectedItems:itemNames});
+            HBEditorEventEmitter.instance.emit(HBEditorConstants.TOOLBAR_ITEMS_STATE_HAS_BEEN_CHANGED, items);
 
             return false;
         }

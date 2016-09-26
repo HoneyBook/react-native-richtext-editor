@@ -30,8 +30,17 @@ class RNRichTextEditor extends Component {
         <View style={styles.container}>
             <HBRichTextEditor
                 ref="myWebView"
+                style={{
+                    alignItems:'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'rgba(0,0,0,0)'
+                  }}
                 initialHTML={bodyForDisplay}/>
-            <HBToolbar />
+            <HBToolbar
+                fixedRight={<View
+                    style={{width:56,backgroundColor:'#000'}}
+                />}
+            />
         </View>
     );
   }
