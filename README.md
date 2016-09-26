@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/react-native-richtext-editor.svg)](https://badge.fury.io/js/react-native-richtext-editor)
+
 # react-native-richtext-editor
 A Flexible Rich Text Editor for React Native.
 
@@ -6,10 +8,9 @@ A Flexible Rich Text Editor for React Native.
 ### Demo
 ![](./demo.gif)
 
-### Installation
-- Still not on npm. In the meantime, add this dependency on your package.json file:
+### Install
 
-```"react-native-richtext-editor": "HoneyBook/react-native-richtext-editor"```
+```npm install react-native-richtext-editor --save```
 
 - Then, in order to add both the editor and its toolbar separately, add these requires to your code:
 ```
