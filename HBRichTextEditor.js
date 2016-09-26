@@ -23,6 +23,29 @@ class HBRichTextEditor extends Component {
         HBEditorEventEmitter.instance.addListener(HBEditorConstants.TOOLBAR_ITEM_WAS_PRESSED, function(itemType) {
             this._handleToolbarItemPress(itemType.type);
         }.bind(this));
+
+        var bodyForDisplay = this.props.initialHTML.replace(/\n/g, "");
+        bodyForDisplay = this._replaceInputTags(bodyForDisplay);
+        bodyForDisplay = bodyForDisplay.replace(/"/g, "'");
+
+        setTimeout(() => {
+            this.setHTML(bodyForDisplay);
+        }, 1000);
+
+    }
+
+    _replaceInputTags(html) {
+        var anchorIndex = 0;
+        while (html.indexOf("<input", anchorIndex) != -1) {
+            var startPos = html.indexOf("<input", anchorIndex);
+            var endPos = html.indexOf(">", startPos);
+
+            var inputTag = html.slice(startPos, endPos + 1);
+            html = html.replace(inputTag, "");
+
+            anchorIndex = endPos;
+        }
+        return html;
     }
 
     componentWillUnmount() {

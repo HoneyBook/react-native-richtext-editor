@@ -244,7 +244,6 @@ class HBToolbar extends Component {
 
 var styles = StyleSheet.create({
     toolbarHolder: {
-        flex: 1,
         flexDirection: "row",
         backgroundColor: 'rgba(125,125,125,0.1)',
     },
