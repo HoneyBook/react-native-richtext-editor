@@ -1,6 +1,6 @@
 {
   "name": "react-native-richtext-editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Flexible Rich Text Editor for React Native",
   "main": "HBRichTextEditor.js",
   "scripts": {
