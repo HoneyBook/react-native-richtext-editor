@@ -896,15 +896,18 @@ function style_html(html_source, options) {
 			var editor = $('#zss_editor_content');
 
 			//set placeHolder
-			if(editor.text().length == 1){
+			if(editor.text().length == 0 || editor.text().length == 1){
 				editor.text(placeholder);
 				editor.css("color","gray");
+				editor.focus();
 			}
 			//set focus
 			editor.focus(function(){
 				if($(this).text() == placeholder){
 					$(this).text("");
 					$(this).css("color","black");
+				} else if ($(this).text().indexOf(placeholder) !== -1) {
+					$(this).text($(this).text().replace(placeholder,""));
 				}
 			}).focusout(function(){
 				if(!$(this).text().length){

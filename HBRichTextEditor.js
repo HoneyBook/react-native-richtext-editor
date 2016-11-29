@@ -65,26 +65,50 @@ class HBRichTextEditor extends Component {
         });
     }
 
+    getSelectedHTML() {
+        var that = this;
+        return new Promise(function (resolve, reject) {
+            that.refs.webviewbridge.getSelectedHTML("zss_editor_content", (error, html) => {
+                resolve(html);
+            });
+        });
+    }
+
     setHTML(html) {
         this.refs.webviewbridge.sendToBridge(`zss_editor.setHTML("${html}");`);
+    }
+
+    setPlaceholder(placeholderText) {
+        this.refs.webviewbridge.sendToBridge(`zss_editor.setPlaceholder("${placeholderText}");`);
     }
 
     _insertLinkWithDialog() {
         this.refs.webviewbridge.sendToBridge(`zss_editor.prepareInsert();`);
 
-        AlertIOS.prompt(
-            'Insert link',
-            'Enter the URL for the link',
-            [
-                {text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
-                {text: 'Insert', onPress: (url) => {
-                    this.refs.webviewbridge.sendToBridge(`zss_editor.insertLink(\"` + url + `\", \"\");`);
-                }, type: "default"},
+        this.getSelectedHTML()
+            .then((html) => {
+                AlertIOS.prompt(
+                    'Insert link',
+                    'Enter the URL for the link',
+                    [
+                        {text: 'Cancel', onPress: () => console.log('Cancel Pressed')},
+                        {text: 'Insert', onPress: (url) => {
+                            if (html.length > 0) {
+                                this.refs.webviewbridge.sendToBridge(`zss_editor.insertLink(\"` + url + `\", \"\");`);
+                            } else {
+                                this.refs.webviewbridge.sendToBridge(`zss_editor.insertLink(\"` + url + `\", \"` + url + `\");`);
+                            }
 
-            ],
-            'plain-text',
-            'http://'
-        );
+                        }, type: "default"},
+
+                    ],
+                    'plain-text',
+                    'http://'
+                );
+            })
+            .catch((err) => {
+                console.log("Error in getSelectedHTML : " + err);
+            });
     }
 
     render() {
