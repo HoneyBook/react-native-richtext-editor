@@ -17,21 +17,13 @@ class HBRichTextEditor extends Component {
 
     constructor(props) {
         super(props);
+        this.placeholder = null;
     }
 
     componentDidMount() {
         HBEditorEventEmitter.instance.addListener(HBEditorConstants.TOOLBAR_ITEM_WAS_PRESSED, function(itemType) {
             this._handleToolbarItemPress(itemType.type);
         }.bind(this));
-
-        var bodyForDisplay = this.props.initialHTML.replace(/\n/g, "");
-        bodyForDisplay = this._replaceInputTags(bodyForDisplay);
-        bodyForDisplay = bodyForDisplay.replace(/"/g, "'");
-
-        setTimeout(() => {
-            this.setHTML(bodyForDisplay);
-        }, 1000);
-
     }
 
     _replaceInputTags(html) {
@@ -60,6 +52,9 @@ class HBRichTextEditor extends Component {
         var that = this;
         return new Promise(function (resolve, reject) {
             that.refs.webviewbridge.getElementHTML("zss_editor_content", (error, html) => {
+                if (that.placeholder && html.indexOf(that.placeholder) != -1) {
+                    html = html.replace(that.placeholder,"");
+                }
                 resolve(html);
             });
         });
@@ -79,6 +74,7 @@ class HBRichTextEditor extends Component {
     }
 
     setPlaceholder(placeholderText) {
+        this.placeholder = placeholderText;
         this.refs.webviewbridge.sendToBridge(`zss_editor.setPlaceholder("${placeholderText}");`);
     }
 
