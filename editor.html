@@ -899,11 +899,13 @@
 				editor.text(placeholder);
 				editor.css("color","gray");
 			}
+
 			//set focus
 			editor.focus(function(){
 				if($(this).text() == placeholder){
 					$(this).text("");
 					$(this).css("color","black");
+					zss_editor.focusEditor();
 				} else if ($(this).text().indexOf(placeholder) !== -1) {
 					$(this).text($(this).text().replace(placeholder,""));
 				}
