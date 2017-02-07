@@ -222,6 +222,14 @@ class HBToolbar extends Component {
         </TouchableOpacity>
     }
 
+    _renderFooter() {
+        if (this.props.footerView) {
+            return this.props.footerView;
+        }
+
+        return undefined;
+    }
+
     render() {
         return (
             <View style={styles.toolbarHolder}>
@@ -232,6 +240,7 @@ class HBToolbar extends Component {
                     contentContainerStyle={{}}
                     dataSource={this.state.dataSource}
                     renderRow={this._renderCol.bind(this)}
+                    renderFooter={this._renderFooter.bind(this)}
                 />
                 {this.props.fixedRight}
 

@@ -55,6 +55,9 @@ class HBRichTextEditor extends Component {
                 if (that.placeholder && html.indexOf(that.placeholder) != -1) {
                     html = html.replace(that.placeholder,"");
                 }
+                if (html.trim().length == 0) {
+                    resolve(" ");
+                }
                 resolve(html);
             });
         });
