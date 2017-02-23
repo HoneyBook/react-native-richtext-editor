@@ -231,8 +231,10 @@ class HBToolbar extends Component {
     }
 
     render() {
+        let bgColorStyle = this.props.toolbarBackgroundColor ? {backgroundColor:this.props.toolbarBackgroundColor} :
+                            {backgroundColor:'rgba(125,125,125,0.1)'};
         return (
-            <View style={styles.toolbarHolder}>
+            <View style={[styles.toolbarHolder,bgColorStyle]}>
                 {this.props.fixedLeft}
                 <ListView
                     horizontal={true}
@@ -253,8 +255,7 @@ class HBToolbar extends Component {
 
 var styles = StyleSheet.create({
     toolbarHolder: {
-        flexDirection: "row",
-        backgroundColor: 'rgba(125,125,125,0.1)',
+        flexDirection: "row"
     },
     buttons: {
         flex: 1,
