@@ -116,15 +116,15 @@ class HBToolbar extends Component {
         switch (type) {
             case HBEditorConstants.TOOLBAR_ITEM_BOLD:
             {
-                return (<Text style={style}>&#xe900;</Text>);
+                return (<Text allowFontScaling={false} style={style}>&#xe900;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ITALIC:
             {
-                return (<Text style={style}>&#xe903;</Text>);
+                return (<Text allowFontScaling={false} style={style}>&#xe903;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_UNDERLINE:
             {
-                return (<Text style={style}>&#xe906;</Text>);
+                return (<Text allowFontScaling={false} style={style}>&#xe906;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_CENTER :
             {
@@ -132,7 +132,7 @@ class HBToolbar extends Component {
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_LEFT:
             {
-                return (<Text style={style}>&#xe905;</Text>);
+                return (<Text allowFontScaling={false} style={style}>&#xe905;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_ALIGN_RIGHT:
             {
@@ -140,19 +140,19 @@ class HBToolbar extends Component {
             }
             case HBEditorConstants.TOOLBAR_ITEM_INSERT_LINK:
             {
-                return (<Text style={style}>&#xe904;</Text>);
+                return (<Text allowFontScaling={false} style={style}>&#xe904;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_REMOVE_LINK:
             {
-                return (<Text style={style}>&#xe904;</Text>);
+                return (<Text allowFontScaling={false} style={style}>&#xe904;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_REMOVE_FORMATTING:
             {
-                return (<Text style={style}>&#xe907;</Text>);
+                return (<Text allowFontScaling={false} style={style}>&#xe907;</Text>);
             }
             case HBEditorConstants.TOOLBAR_ITEM_BULLETS_LIST:
             {
-                return (<Text style={style}>&#xe901;</Text>);
+                return (<Text allowFontScaling={false} style={style}>&#xe901;</Text>);
             }
         }
 
