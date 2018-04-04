@@ -134,6 +134,8 @@ class HBRichTextEditor extends Component {
             return false;
         }
         else if (event.url.indexOf("scroll://") != -1) {
+            HBEditorEventEmitter.instance.emit(HBEditorConstants.HB_RICH_EDITOR_GOT_FOCUS);
+
             return false;
         }
 

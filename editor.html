@@ -866,8 +866,6 @@
                 }
             });
 
-            $('#zss_editor_content').autoCapitalize();
-
             $(document).on('selectionchange',function(e){
                 zss_editor.calculateEditorHeightWithCaretPosition();
                 zss_editor.setScrollPosition();
@@ -893,6 +891,8 @@
                     zss_editor.focusEditor();
                 }
             });
+
+            $('#zss_editor_content').autoCapitalize();
 
         }//end
 
