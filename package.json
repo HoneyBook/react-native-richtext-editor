@@ -9,7 +9,7 @@
   "dependencies": {
     "fbemitter": "^2.0.2",
     "react-native-webview-bridge": "HoneyBook/react-native-webview-bridge",
-    "lodash": "3.10.1"
+    "lodash": "4.17.21"
   },
   "repository": {
     "type": "git",
